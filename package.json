@@ -1,0 +1,36 @@
+{
+    "name": "systemd-unit-survey",
+    "version": "0.0.1",
+    "description": "Survey of systemd units in Debian",
+    "keywords": [
+        "Debian",
+        "Devuan",
+        "repository",
+        "survey",
+        "systemd",
+        "unit"
+    ],
+    "homepage": "https://github.com/blinkdog/systemd-unit-survey",
+    "bugs": "https://github.com/blinkdog/systemd-unit-survey/issues",
+    "license": "GPL-3.0",
+    "author": "Patrick Meade <blinkdog@protonmail.com>",
+    "files": [
+        "CHANGELOG.md",
+        "index.js",
+        "lib",
+        "LICENSE",
+        "package.json",
+        "README.md"
+    ],
+    "main": "systemd-unit-survey",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/blinkdog/systemd-unit-survey.git"
+    },
+    "devDependencies": {
+        "coffeescript": "2.3.2",
+        "istanbul": "0.4.5",
+        "mocha": "5.2.0",
+        "should": "13.2.3"
+    }
+}
