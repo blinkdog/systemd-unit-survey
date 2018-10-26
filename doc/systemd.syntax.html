@@ -1,0 +1,71 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>systemd.syntax</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"></head><body vlink="#840084" text="black" link="#0000FF" bgcolor="white" alink="#0000FF"><style>
+    a.headerlink {
+      color: #c60f0f;
+      font-size: 0.8em;
+      padding: 0 4px 0 4px;
+      text-decoration: none;
+      visibility: hidden;
+    }
+
+    a.headerlink:hover {
+      background-color: #c60f0f;
+      color: white;
+    }
+
+    h1:hover > a.headerlink, h2:hover > a.headerlink, h3:hover > a.headerlink, dt:hover > a.headerlink {
+      visibility: visible;
+    }
+  </style><a href="https://www.freedesktop.org/software/systemd/man/index.html">Index </a>·
+  <a href="https://www.freedesktop.org/software/systemd/man/systemd.directives.html">Directives </a><span style="float:right">systemd 239</span><hr><div class="refentry"><a name="systemd.syntax"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>systemd.syntax — General syntax of systemd configuration files</p></div><div class="refsect1"><a name="id-1.4"></a><h2 id="Introduction">Introduction<a class="headerlink" title="Permalink to this headline" href="#Introduction">¶</a></h2><p>This page describes the basic principles of configuration files used by
+    <a href="https://www.freedesktop.org/software/systemd/man/systemd.html#"><span class="citerefentry"><span class="refentrytitle">systemd</span>(1)</span></a>
+    and related programs for:
+    </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>systemd unit files, see
+      <a href="https://www.freedesktop.org/software/systemd/man/systemd.unit.html#"><span class="citerefentry"><span class="refentrytitle">systemd.unit</span>(5)</span></a>,
+      <a href="https://www.freedesktop.org/software/systemd/man/systemd.service.html#"><span class="citerefentry"><span class="refentrytitle">systemd.service</span>(5)</span></a>,
+      <a href="https://www.freedesktop.org/software/systemd/man/systemd.socket.html#"><span class="citerefentry"><span class="refentrytitle">systemd.socket</span>(5)</span></a>,
+      <a href="https://www.freedesktop.org/software/systemd/man/systemd.device.html#"><span class="citerefentry"><span class="refentrytitle">systemd.device</span>(5)</span></a>,
+      <a href="https://www.freedesktop.org/software/systemd/man/systemd.mount.html#"><span class="citerefentry"><span class="refentrytitle">systemd.mount</span>(5)</span></a>,
+      <a href="https://www.freedesktop.org/software/systemd/man/systemd.automount.html#"><span class="citerefentry"><span class="refentrytitle">systemd.automount</span>(5)</span></a>,
+      <a href="https://www.freedesktop.org/software/systemd/man/systemd.swap.html#"><span class="citerefentry"><span class="refentrytitle">systemd.swap</span>(5)</span></a>,
+      <a href="https://www.freedesktop.org/software/systemd/man/systemd.target.html#"><span class="citerefentry"><span class="refentrytitle">systemd.target</span>(5)</span></a>,
+      <a href="https://www.freedesktop.org/software/systemd/man/systemd.path.html#"><span class="citerefentry"><span class="refentrytitle">systemd.path</span>(5)</span></a>,
+      <a href="https://www.freedesktop.org/software/systemd/man/systemd.timer.html#"><span class="citerefentry"><span class="refentrytitle">systemd.timer</span>(5)</span></a>,
+      <a href="https://www.freedesktop.org/software/systemd/man/systemd.slice.html#"><span class="citerefentry"><span class="refentrytitle">systemd.slice</span>(5)</span></a>,
+      <a href="https://www.freedesktop.org/software/systemd/man/systemd.scope.html#"><span class="citerefentry"><span class="refentrytitle">systemd.scope</span>(5)</span></a></p></li><li class="listitem"><p>daemon config files, see
+      <a href="https://www.freedesktop.org/software/systemd/man/systemd-system.conf.html#"><span class="citerefentry"><span class="refentrytitle">systemd-system.conf</span>(5)</span></a>,
+      <a href="https://www.freedesktop.org/software/systemd/man/systemd-user.conf.html#"><span class="citerefentry"><span class="refentrytitle">systemd-user.conf</span>(5)</span></a>,
+      <a href="https://www.freedesktop.org/software/systemd/man/logind.conf.html#"><span class="citerefentry"><span class="refentrytitle">logind.conf</span>(5)</span></a>,
+      <a href="https://www.freedesktop.org/software/systemd/man/journald.conf.html#"><span class="citerefentry"><span class="refentrytitle">journald.conf</span>(5)</span></a>,
+      <a href="https://www.freedesktop.org/software/systemd/man/journal-remote.conf.html#"><span class="citerefentry"><span class="refentrytitle">journal-remote.conf</span>(5)</span></a>,
+      <a href="https://www.freedesktop.org/software/systemd/man/journal-upload.conf.html#"><span class="citerefentry"><span class="refentrytitle">journal-upload.conf</span>(5)</span></a>,
+      <a href="https://www.freedesktop.org/software/systemd/man/systemd-sleep.conf.html#"><span class="citerefentry"><span class="refentrytitle">systemd-sleep.conf</span>(5)</span></a>,
+      <a href="https://www.freedesktop.org/software/systemd/man/timesyncd.conf.html#"><span class="citerefentry"><span class="refentrytitle">timesyncd.conf</span>(5)</span></a>
+      </p></li></ul></div><p>
+    </p><p>The syntax is inspired by
+    <a class="ulink" href="http://standards.freedesktop.org/desktop-entry-spec/latest/" target="_top">XDG Desktop Entry Specification</a>
+    <code class="filename">.desktop</code> files, which are in turn inspired by Microsoft Windows
+    <code class="filename">.ini</code> files.
+    </p><p>Each file is a plain text file divided into sections, with configuration entries in the
+    style <em class="replaceable"><code>key</code></em>=<em class="replaceable"><code>value</code></em>.
+    Empty lines and lines starting with "<code class="literal">#</code>" or "<code class="literal">;</code>" are
+    ignored, which may be used for commenting.</p><p>Lines ending in a backslash are concatenated with the following line while reading and the
+    backslash is replaced by a space character. This may be used to wrap long lines. The limit on
+    line length is very large (currently 1 MB), but it is recommended to avoid such long lines and
+    use multiple directives, variable substitution, or other mechanism as appropriate for the given
+    file type.</p><div class="example"><a name="id-1.4.6"></a><p class="title"><b>Example&nbsp;1.&nbsp;</b></p><div class="example-contents"><pre class="programlisting">[Section A]
+KeyOne=value 1
+KeyTwo=value 2
+
+# a comment
+
+[Section B]
+Setting="something" "some thing" "…"
+KeyTwo=value 2 \
+       value 2 continued
+</pre></div></div><br class="example-break"><p>Various settings are allowed to be specified more than once, in which case the
+    interpretation depends on the setting. Often, multiple settings form a list, and setting to an
+    empty value "resets", which means that previous assignments are ignored. When this is allowed,
+    it is mentioned in the description of the setting. Note that using multiple assignments to the
+    same value makes the file incompatible with parsers for the XDG <code class="filename">.desktop</code>
+    file format.</p></div></div>
+</body></html>

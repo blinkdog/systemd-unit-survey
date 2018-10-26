@@ -1,0 +1,64 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>systemd.slice</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"></head><body vlink="#840084" text="black" link="#0000FF" bgcolor="white" alink="#0000FF"><style>
+    a.headerlink {
+      color: #c60f0f;
+      font-size: 0.8em;
+      padding: 0 4px 0 4px;
+      text-decoration: none;
+      visibility: hidden;
+    }
+
+    a.headerlink:hover {
+      background-color: #c60f0f;
+      color: white;
+    }
+
+    h1:hover > a.headerlink, h2:hover > a.headerlink, h3:hover > a.headerlink, dt:hover > a.headerlink {
+      visibility: visible;
+    }
+  </style><a href="https://www.freedesktop.org/software/systemd/man/index.html">Index </a>·
+  <a href="https://www.freedesktop.org/software/systemd/man/systemd.directives.html">Directives </a><span style="float:right">systemd 239</span><hr><div class="refentry"><a name="systemd.slice"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>systemd.slice — Slice unit configuration</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><p><code class="filename"><em class="replaceable"><code>slice</code></em>.slice</code></p></div><div class="refsect1"><a name="id-1.5"></a><h2 id="Description">Description<a class="headerlink" title="Permalink to this headline" href="#Description">¶</a></h2><p>A unit configuration file whose name ends in "<code class="literal">.slice</code>" encodes information about a slice
+    unit. A slice unit is a concept for hierarchically managing resources of a group of processes. This management is
+    performed by creating a node in the Linux Control Group (cgroup) tree. Units that manage processes (primarily scope
+    and service units) may be assigned to a specific slice. For each slice, certain resource limits may be set that
+    apply to all processes of all units contained in that slice. Slices are organized hierarchically in a tree. The
+    name of the slice encodes the location in the tree. The name consists of a dash-separated series of names, which
+    describes the path to the slice from the root slice. The root slice is named <code class="filename">-.slice</code>. Example:
+    <code class="filename">foo-bar.slice</code> is a slice that is located within <code class="filename">foo.slice</code>, which in turn
+    is located in the root slice <code class="filename">-.slice</code>.
+    </p><p>Note that slice units cannot be templated, nor is possible to add multiple names to a slice unit by creating
+    additional symlinks to its unit file.</p><p>By default, service and scope units are placed in
+    <code class="filename">system.slice</code>, virtual machines and containers
+    registered with
+    <a href="https://www.freedesktop.org/software/systemd/man/systemd-machined.html#"><span class="citerefentry"><span class="refentrytitle">systemd-machined</span>(1)</span></a>
+    are found in <code class="filename">machine.slice</code>, and user sessions
+    handled by
+    <a href="https://www.freedesktop.org/software/systemd/man/systemd-logind.html#"><span class="citerefentry"><span class="refentrytitle">systemd-logind</span>(1)</span></a>
+    in <code class="filename">user.slice</code>. See
+    <a href="https://www.freedesktop.org/software/systemd/man/systemd.special.html#"><span class="citerefentry"><span class="refentrytitle">systemd.special</span>(5)</span></a>
+    for more information.</p><p>See
+    <a href="https://www.freedesktop.org/software/systemd/man/systemd.unit.html#"><span class="citerefentry"><span class="refentrytitle">systemd.unit</span>(5)</span></a>
+    for the common options of all unit configuration
+    files. The common configuration items are configured
+    in the generic [Unit] and [Install] sections. The
+    slice specific configuration options are configured in
+    the [Slice] section. Currently, only generic resource control settings
+    as described in
+    <a href="https://www.freedesktop.org/software/systemd/man/systemd.resource-control.html#"><span class="citerefentry"><span class="refentrytitle">systemd.resource-control</span>(5)</span></a> are allowed.
+    </p><p>See the <a class="ulink" href="https://www.freedesktop.org/wiki/Software/systemd/ControlGroupInterface/" target="_top">New
+    Control Group Interfaces</a> for an introduction on how to make
+    use of slice units from programs.</p></div><div class="refsect1"><a name="id-1.6"></a><h2 id="Automatic Dependencies">Automatic Dependencies<a class="headerlink" title="Permalink to this headline" href="#Automatic%20Dependencies">¶</a></h2><div class="refsect2"><a name="id-1.6.2"></a><h3 id="Implicit Dependencies">Implicit Dependencies<a class="headerlink" title="Permalink to this headline" href="#Implicit%20Dependencies">¶</a></h3><p>The following dependencies are implicitly added:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Slice units automatically gain dependencies of type
+        <code class="varname">After=</code> and <code class="varname">Requires=</code> on
+        their immediate parent slice unit.</p></li></ul></div></div><div class="refsect2"><a name="id-1.6.3"></a><h3 id="Default Dependencies">Default Dependencies<a class="headerlink" title="Permalink to this headline" href="#Default%20Dependencies">¶</a></h3><p>The following dependencies are added unless <code class="varname">DefaultDependencies=no</code> is set:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Slice units will automatically have dependencies of type <code class="varname">Conflicts=</code> and
+        <code class="varname">Before=</code> on
+        <code class="filename">shutdown.target</code>. These ensure that slice units are removed prior to system shutdown.
+        Only slice units involved with late system shutdown should disable
+        <code class="varname">DefaultDependencies=</code> option.</p></li></ul></div></div></div><div class="refsect1"><a name="id-1.7"></a><h2 id="See Also">See Also<a class="headerlink" title="Permalink to this headline" href="#See%20Also">¶</a></h2><p>
+      <a href="https://www.freedesktop.org/software/systemd/man/systemd.html#"><span class="citerefentry"><span class="refentrytitle">systemd</span>(1)</span></a>,
+      <a href="https://www.freedesktop.org/software/systemd/man/systemd.unit.html#"><span class="citerefentry"><span class="refentrytitle">systemd.unit</span>(5)</span></a>,
+      <a href="https://www.freedesktop.org/software/systemd/man/systemd.resource-control.html#"><span class="citerefentry"><span class="refentrytitle">systemd.resource-control</span>(5)</span></a>,
+      <a href="https://www.freedesktop.org/software/systemd/man/systemd.service.html#"><span class="citerefentry"><span class="refentrytitle">systemd.service</span>(5)</span></a>,
+      <a href="https://www.freedesktop.org/software/systemd/man/systemd.scope.html#"><span class="citerefentry"><span class="refentrytitle">systemd.scope</span>(5)</span></a>,
+      <a href="https://www.freedesktop.org/software/systemd/man/systemd.special.html#"><span class="citerefentry"><span class="refentrytitle">systemd.special</span>(7)</span></a>,
+      <a href="https://www.freedesktop.org/software/systemd/man/systemd.directives.html#"><span class="citerefentry"><span class="refentrytitle">systemd.directives</span>(7)</span></a>
+    </p></div></div>
+</body></html>

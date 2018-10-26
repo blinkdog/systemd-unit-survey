@@ -1,0 +1,75 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>systemd.target</title><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot"></head><body vlink="#840084" text="black" link="#0000FF" bgcolor="white" alink="#0000FF"><style>
+    a.headerlink {
+      color: #c60f0f;
+      font-size: 0.8em;
+      padding: 0 4px 0 4px;
+      text-decoration: none;
+      visibility: hidden;
+    }
+
+    a.headerlink:hover {
+      background-color: #c60f0f;
+      color: white;
+    }
+
+    h1:hover > a.headerlink, h2:hover > a.headerlink, h3:hover > a.headerlink, dt:hover > a.headerlink {
+      visibility: visible;
+    }
+  </style><a href="https://www.freedesktop.org/software/systemd/man/index.html">Index </a>·
+  <a href="https://www.freedesktop.org/software/systemd/man/systemd.directives.html">Directives </a><span style="float:right">systemd 239</span><hr><div class="refentry"><a name="systemd.target"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>systemd.target — Target unit configuration</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><p><code class="filename"><em class="replaceable"><code>target</code></em>.target</code></p></div><div class="refsect1"><a name="id-1.5"></a><h2 id="Description">Description<a class="headerlink" title="Permalink to this headline" href="#Description">¶</a></h2><p>A unit configuration file whose name ends in
+    "<code class="literal">.target</code>" encodes information about a target unit
+    of systemd, which is used for grouping units and as well-known
+    synchronization points during start-up.</p><p>This unit type has no specific options. See
+    <a href="https://www.freedesktop.org/software/systemd/man/systemd.unit.html#"><span class="citerefentry"><span class="refentrytitle">systemd.unit</span>(5)</span></a>
+    for the common options of all unit configuration files. The common
+    configuration items are configured in the generic [Unit] and
+    [Install] sections. A separate [Target] section does not exist,
+    since no target-specific options may be configured.</p><p>Target units do not offer any additional functionality on
+    top of the generic functionality provided by units. They exist
+    merely to group units via dependencies (useful as boot targets),
+    and to establish standardized names for synchronization points
+    used in dependencies between units. Among other things, target
+    units are a more flexible replacement for SysV runlevels in the
+    classic SysV init system. (And for compatibility reasons special
+    target units such as <code class="filename">runlevel3.target</code> exist
+    which are used by the SysV runlevel compatibility code in systemd.
+    See
+    <a href="https://www.freedesktop.org/software/systemd/man/systemd.special.html#"><span class="citerefentry"><span class="refentrytitle">systemd.special</span>(7)</span></a>
+    for details).</p></div><div class="refsect1"><a name="id-1.6"></a><h2 id="Automatic Dependencies">Automatic Dependencies<a class="headerlink" title="Permalink to this headline" href="#Automatic%20Dependencies">¶</a></h2><div class="refsect2"><a name="id-1.6.2"></a><h3 id="Implicit Dependencies">Implicit Dependencies<a class="headerlink" title="Permalink to this headline" href="#Implicit%20Dependencies">¶</a></h3><p>There are no implicit dependencies for target units.</p></div><div class="refsect2"><a name="id-1.6.3"></a><h3 id="Default Dependencies">Default Dependencies<a class="headerlink" title="Permalink to this headline" href="#Default%20Dependencies">¶</a></h3><p>The following dependencies are added unless
+      <code class="varname">DefaultDependencies=no</code> is set:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Target units will automatically complement all
+        configured dependencies of type <code class="varname">Wants=</code> or
+        <code class="varname">Requires=</code> with dependencies of type
+        <code class="varname">After=</code> unless <code class="varname">DefaultDependencies=no</code>
+        is set in the specified units. Note that <code class="varname">Wants=</code> or
+        <code class="varname">Requires=</code> must be defined in the target unit itself — if
+        you for example define <code class="varname">Wants=</code>some.target in
+        some.service, the automatic ordering will not be added.</p></li><li class="listitem"><p>Target units automatically gain <code class="varname">Conflicts=</code>
+        dependency against <code class="filename">shutdown.target</code>.</p></li></ul></div></div></div><div class="refsect1"><a name="id-1.7"></a><h2 id="Example">Example<a class="headerlink" title="Permalink to this headline" href="#Example">¶</a></h2><div class="example"><a name="id-1.7.2"></a><p class="title"><b>Example&nbsp;1.&nbsp;Simple standalone target</b></p><div class="example-contents"><pre class="programlisting"># emergency-net.target
+
+[Unit]
+Description=Emergency Mode with Networking
+Requires=emergency.target systemd-networkd.service
+After=emergency.target systemd-networkd.service
+AllowIsolate=yes</pre><p>When adding dependencies to other units, it's important to check if they set
+      <code class="varname">DefaultDependencies=</code>. Service units, unless they set
+      <code class="varname">DefaultDependencies=no</code>, automatically get a dependency on
+      <code class="filename">sysinit.target</code>. In this case, both
+      <code class="filename">emergency.target</code> and <code class="filename">systemd-networkd.service</code>
+      have <code class="varname">DefaultDependencies=no</code>, so they are suitable for use
+      in this target, and do not pull in <code class="filename">sysinit.target</code>.</p><p>You can now switch into this emergency mode by running <code class="varname">systemctl
+      isolate emergency-net.target</code> or by passing the option
+      <code class="varname">systemd.unit=emergency-net.target</code> on the kernel command
+      line.</p><p>Other units can have <code class="varname">WantedBy=emergency-net.target</code> in the
+      <code class="varname">[Install]</code> section. After they are enabled using
+      <span class="command"><strong>systemctl enable</strong></span>, they will be started before
+      <code class="varname">emergency-net.target</code> is started. It is also possible to add
+      arbitrary units as dependencies of <code class="filename">emergency.target</code> without
+      modifying them by using <span class="command"><strong>systemctl add-wants</strong></span>.
+      </p></div></div><br class="example-break"></div><div class="refsect1"><a name="id-1.8"></a><h2 id="See Also">See Also<a class="headerlink" title="Permalink to this headline" href="#See%20Also">¶</a></h2><p>
+        <a href="https://www.freedesktop.org/software/systemd/man/systemd.html#"><span class="citerefentry"><span class="refentrytitle">systemd</span>(1)</span></a>,
+        <a href="https://www.freedesktop.org/software/systemd/man/systemctl.html#"><span class="citerefentry"><span class="refentrytitle">systemctl</span>(1)</span></a>,
+        <a href="https://www.freedesktop.org/software/systemd/man/systemd.unit.html#"><span class="citerefentry"><span class="refentrytitle">systemd.unit</span>(5)</span></a>,
+        <a href="https://www.freedesktop.org/software/systemd/man/systemd.special.html#"><span class="citerefentry"><span class="refentrytitle">systemd.special</span>(7)</span></a>,
+        <a href="https://www.freedesktop.org/software/systemd/man/systemd.directives.html#"><span class="citerefentry"><span class="refentrytitle">systemd.directives</span>(7)</span></a>
+      </p></div></div>
+</body></html>

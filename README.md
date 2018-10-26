@@ -1,6 +1,13 @@
 # systemd-unit-survey
 Survey of systemd units in Debian
 
+## Inspirational quotes
+"It's like an express train full of things designed to hurt your mind.
+Just when you think that it's finished running you over, and the last
+train car of stupid starts receding into the distance, another hits
+you, grinding another chunk of brain cells beneath its wheels." -
+Darren MacLennan
+
 ## License
 systemd-unit-survey  
 Copyright 2018 Patrick Meade.

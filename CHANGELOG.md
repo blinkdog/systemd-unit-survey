@@ -18,6 +18,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Security
 - in case of vulnerabilities
 
+## [0.0.2] - 2018-10-26
+### Added
+- Inspirational quote in README.md
+- systemd unit documentation in doc/
+- preliminary results in doc/
+- some Contents parsing code in contents.coffee and debian.coffee
+
 ## 0.0.1 - 2018-10-21
 ### Added
 - Project specific ignores to .gitignore
@@ -27,4 +34,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Node package specification in package.json
 - Project license notice to README.md
 
-[Unreleased]: https://github.com/blinkdog/telnet-stream/compare/v0.0.1...HEAD
+[Unreleased]: https://github.com/blinkdog/telnet-stream/compare/v0.0.2...HEAD
+[0.0.2]: https://github.com/blinkdog/telnet-stream/compare/v0.0.1...v0.0.2
